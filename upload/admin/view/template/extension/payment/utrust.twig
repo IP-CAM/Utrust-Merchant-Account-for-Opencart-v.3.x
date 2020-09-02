@@ -1,0 +1,159 @@
+{{ header }}{{ column_left }}
+<div id="content">
+
+    <div class="page-header">
+        <div class="container-fluid">
+            <div class="pull-right">
+                <button type="submit" form="form-payment" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+                <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+            <h1>{{ heading_title }}</h1>
+            <ul class="breadcrumb">
+                {% for breadcrumb in breadcrumbs %}
+                    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        {% if error_warning %}
+            <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+            </div>
+            <div class="panel-body">
+                <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-payment" class="form-horizontal">
+
+                    <div class="form-group ">
+                        <label class="col-sm-2 control-label" for="input-api-url">{{ entry_api_url }}</label>
+                        <div class="col-sm-10">
+                            <select name="payment_utrust_api_url" id="input-api-url" class="form-control">
+                                {% if payment_utrust_api_url == "https://merchants.api.utrust.com/api/" %}
+                                    <option value="https://merchants.api.utrust.com/api/" selected="selected">{{ text_production }}</option>
+                                    <option value="https://merchants.api.sandbox-utrust.com/api/" >{{ text_sandbox }}</option>
+                                {% else %}
+                                    <option value="https://merchants.api.utrust.com/api/">{{ text_production }}</option>
+                                    <option value="https://merchants.api.sandbox-utrust.com/api/"  selected="selected">{{ text_sandbox }}</option>
+                                {% endif %}
+                            </select>
+                        </div>
+
+                        <div class="col-sm-12"><br></div>
+
+                        <label class="col-sm-2 control-label" for="input-api-token">{{ entry_api_token }}</label>
+                        <div class="col-sm-10">
+                            <div class="">
+                                <input type="text" name="payment_utrust_api_token" value="{{ payment_utrust_api_token }}" placeholder="{{ entry_api_token }}" id="input-api-token" class="form-control"/>
+                                {% if error_api_token %}
+                                    <div class="text-danger">{{ error_api_token }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-sm-12"><br></div>
+
+                        <label class="col-sm-2 control-label" for="input-webhook-secret">{{ entry_webhook_secret }}</label>
+                        <div class="col-sm-10">
+                            <div class="">
+                                <input type="text" name="payment_utrust_webhook_secret" value="{{ payment_utrust_webhook_secret }}" placeholder="{{ entry_webhook_secret }}" id="input-webhook-secret" class="form-control"/>
+                                {% if error_webhook_secret %}
+                                    <div class="text-danger">{{ error_webhook_secret }}</div>
+                                {% endif %}
+
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12"><br></div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-order-status-pending">{{ entry_order_status_pending }}</label>
+                        <div class="col-sm-10">
+                            <select name="payment_utrust_order_status_id_pending" id="input-order-status-pending" class="form-control">
+                                {% for order_status in order_statuses %}
+                                    {% if order_status.order_status_id == payment_utrust_order_status_id_pending %}
+                                        <option value="{{ order_status.order_status_id }}" selected="selected">{{ order_status.name }}</option>
+                                    {% else %}
+                                        <option value="{{ order_status.order_status_id }}">{{ order_status.name }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-sm-12"><br></div>
+
+                        <label class="col-sm-2 control-label" for="input-order-status-paid">{{ entry_order_status_paid }}</label>
+                        <div class="col-sm-10">
+                            <select name="payment_utrust_order_status_id_paid" id="input-order-status-paid" class="form-control">
+                                {% for order_status in order_statuses %}
+                                    {% if order_status.order_status_id == payment_utrust_order_status_id_paid %}
+                                        <option value="{{ order_status.order_status_id }}" selected="selected">{{ order_status.name }}</option>
+                                    {% else %}
+                                        <option value="{{ order_status.order_status_id }}">{{ order_status.name }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-sm-12"><br></div>
+
+                        <label class="col-sm-2 control-label" for="input-order-status-cancel">{{ entry_order_status_cancel }}</label>
+                        <div class="col-sm-10">
+                            <select name="payment_utrust_order_status_id_cancel" id="input-order-status-cancel" class="form-control">
+                                {% for order_status in order_statuses %}
+                                    {% if order_status.order_status_id == payment_utrust_order_status_id_cancel %}
+                                        <option value="{{ order_status.order_status_id }}" selected="selected">{{ order_status.name }}</option>
+                                    {% else %}
+                                        <option value="{{ order_status.order_status_id }}">{{ order_status.name }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-sm-12"><br></div>
+
+
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-geo-zone">{{ entry_geo_zone }}</label>
+                        <div class="col-sm-10">
+                            <select name="payment_hipay_multibanco_geo_zone_id" id="input-geo-zone" class="form-control">
+                                <option value="0">{{ text_all_zones }}</option>
+                                {% for geo_zone in geo_zones %}
+                                    {% if geo_zone.geo_zone_id == payment_utrust_geo_zone_id %}
+                                        <option value="{{ geo_zone.geo_zone_id }}" selected="selected">{{ geo_zone.name }}</option>
+                                    {% else %}
+                                        <option value="{{ geo_zone.geo_zone_id }}">{{ geo_zone.name }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+                        <div class="col-sm-10">
+                            <select name="payment_utrust_status" id="input-status" class="form-control">
+                                {% if payment_utrust_status %}
+                                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                                    <option value="0">{{ text_disabled }}</option>
+                                {% else %}
+                                    <option value="1">{{ text_enabled }}</option>
+                                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-sort-order">{{ entry_sort_order }}</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="payment_utrust_sort_order" value="{{ payment_utrust_sort_order }}" placeholder="{{ entry_sort_order }}" id="input-sort-order" class="form-control"/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{{ footer }}
