@@ -56,7 +56,11 @@ class ControllerExtensionPaymentUtrust extends Controller {
 
 
                 foreach ($totals as $total) {
-                    $data['totals'][$total['code']] = $total['value'];
+                    if (isset($data['totals'][$total['code']])) {
+                        $data['totals'][$total['code']] += $total['value'];
+                    }else{
+                        $data['totals'][$total['code']] = $total['value'];
+                    }
                 }
                 foreach ($products as $product) {
 
@@ -87,23 +91,40 @@ class ControllerExtensionPaymentUtrust extends Controller {
                 ];
 
 
+                $tax = 0;
+                $discount = 0;
+
+
+                foreach (array_keys($data['totals']) as $key => $value) {
+
+                    if ($value != 'shipping' && $value != 'sub_total' && $value != 'total') {
+                        if ($data['totals'][$value] > 0) {
+                            $tax += $data['totals'][$value];
+                        } else {
+                            $discount += $data['totals'][$value];
+                        }
+                    }
+                }
+
                 if (isset($data['totals']['shipping'])) {
-                    $orderData['amount']['details']['shipping'] = number_format($data['totals']['shipping'], 2, ".", "");
+                    if (isset($data['totals']['shipping']) != 0) {
+                        $orderData['amount']['details']['shipping'] = number_format($data['totals']['shipping'], 2, ".", "");
+                    }
                 }
 
-                if (isset($data['totals']['tax'])) {
-                    $orderData['amount']['details']['tax'] = number_format($data['totals']['tax'], 2, ".", "");
+                if ($tax != 0) {
+                    $orderData['amount']['details']['tax'] = number_format($tax, 2, ".", "");
                 }
 
-                if (isset($data['totals']['coupon'])) {
-                    $orderData['amount']['details']['coupon'] = number_format($data['totals']['coupon'], 2, ".", "");
+                if ($discount != 0) {
+                    $orderData['amount']['details']['discount'] = number_format($discount * -1, 2, ".", "")  ;
                 }
                 $this->log->write($orderData);
                 $customerData = [
                     'first_name' => $customer_firstname,
                     'last_name' => $customer_lastname,
                     'email' => $customer_email,
-                    'country' => $data['payment_country'],
+                    'country' => $data['shipping_iso_code_2'],
                 ];
 
                 try {

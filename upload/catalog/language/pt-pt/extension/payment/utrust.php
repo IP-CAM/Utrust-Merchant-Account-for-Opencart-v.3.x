@@ -1,7 +1,7 @@
 <?php
 
 // Text
-$_['text_title'] = 'Utrust <img style="height: auto;max-width: 129px;" src="/image/payment/utrust-checkout.png" alt="utrust.com" title="utrust.com"/>';
+$_['text_title'] = 'Utrust <img style="height: auto;max-width: 129px;" src="/admin/view/image/payment/utrust-checkout.png" alt="utrust.com" title="utrust.com"/>';
 $_['utrust_pending'] = 'Método de pagamento escolhido Utrust';
 $_['utrust_waiting'] = 'À espera de pagamento';
 $_['utrust_cancelled'] = 'Pagamento Cancelado';
