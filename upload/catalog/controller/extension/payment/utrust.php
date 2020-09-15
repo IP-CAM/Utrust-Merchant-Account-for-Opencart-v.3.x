@@ -124,7 +124,7 @@ class ControllerExtensionPaymentUtrust extends Controller {
                     'first_name' => $customer_firstname,
                     'last_name' => $customer_lastname,
                     'email' => $customer_email,
-                    'country' => $data['shipping_iso_code_2'],
+                    'country' => $data['payment_iso_code_2'],
                 ];
 
                 try {
