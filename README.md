@@ -77,3 +77,7 @@ You can contribute by simply letting us know your suggestions or any problems th
 
 You can also fork the repository on GitHub and open a pull request for the `master` branch with your missing features and/or bug fixes.
 Please make sure the new code follows the same style and conventions as already written code.
+
+## License
+
+The Utrust for Opencart extension is available to the public under the GNU GPLv3 license. Please see LICENSE for further details.
